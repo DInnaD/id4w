@@ -13,7 +13,7 @@ var userFeed = new Instafeed({
   userId: '8987997106',
   userId: '7450567851',
   accessToken: '7450567851.1677ed0.ef957e1995de481c9522ae06a24d1508',
-  resolution: 'standard_resolution',
+  resolution: 'low_resolution',
   template: '<a href="{{link}}" target="_blank" id="{{id}}"><img src="{{image}}" /></a>',
   /*sortBy: 'most-recent',*/
   limit:60,
