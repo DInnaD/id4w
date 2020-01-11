@@ -76,7 +76,7 @@ ball.ondragstart = function() {
       var location = response.location;
 			var latitude = location.lat;
 			var longitude = location.lng;
-			var weatherUrl = 'http://api.weatherstack.com/current?access_key=c0e883218e404d8a9eb111529180704&q=' + latitude + ',' + longitude;
+			var weatherUrl = 'http://api.weatherstack.com/current?access_key=c0e883218e404d8a9eb111529180704&query=' + latitude + ',' + longitude;
       getWeatherInfo(weatherUrl); //this function sends ajax request to weather API
 			/*getForecastrInfo(latitude,longitude); 
 			c696097710604a5c8a4154155170607*/
