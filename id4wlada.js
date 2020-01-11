@@ -73,9 +73,11 @@ ball.ondragstart = function() {
     });
   },
 		success: function(response) {
-      var location = response.location;
-			var latitude = location.lat;
-			var longitude = location.lng;
+			
+      var location = response.region;
+			var localtime = region.localtime;
+			var latitude = region.lat;
+			var longitude = region.lon;
 			var weatherUrl = 'http://api.weatherstack.com/current?access_key=c0e883218e404d8a9eb111529180704&query=' + latitude + ',' + longitude;
       getWeatherInfo(weatherUrl); //this function sends ajax request to weather API
 			/*getForecastrInfo(latitude,longitude); 
@@ -87,146 +89,7 @@ ball.ondragstart = function() {
     });
 	   /******************************************************/
  /*
-  getForecastrInfo(url){
-   $.ajax({
-      url: url,
-      dataType: 'json',
-      success: function(response) {
-        var location = response.location;
-	var latitude = parseInt(location.lat);
-	var longitude = parseInt(location.lng); }
-   var map;
-  var geoJSON;
-  var request;
-  var gettingData = false;
-  var openWeatherMapKey = "4b21fe0c4323ae251a754750e6cb5638"
-  function initialize() {
-    var mapOptions = {
-      zoom: 4,
-      center: new google.maps.LatLng(latitude, longitude)
-       };
-    map = new google.maps.Map(document.getElementById('map-canvas'),
-        mapOptions);
-    // Add interaction listeners to make weather requests
-    google.maps.event.addListener(map, 'idle', checkIfDataRequested);
-    // Sets up and populates the info window with details
-    map.data.addListener('click', function(event) {
-      infowindow.setContent(
-       "<img src=" + event.feature.getProperty("icon") + ">"
-       + "<br /><strong>" + event.feature.getProperty("city") + "</strong>"
-       + "<br />" + event.feature.getProperty("temperature") + "&deg;C"
-       + "<br />" + event.feature.getProperty("weather")
-       );
-      infowindow.setOptions({
-          position:{
-            lat: event.latLng.lat(),
-            lng: event.latLng.lng()
-          },
-          pixelOffset: {
-            width: 0,
-            height: -15
-          }
-        });
-      infowindow.open(map);
-    });
-  }
-  var checkIfDataRequested = function() {
-    // Stop extra requests being sent
-    while (gettingData === true) {
-      request.abort();
-      gettingData = false;
-    }
-    getCoords();
-  };
-  // Get the coordinates from the Map bounds
-  var getCoords = function() {
-    var bounds = map.getBounds();
-    var NE = bounds.getNorthEast();
-    var SW = bounds.getSouthWest();
-    getWeather(NE.lat(), NE.lng(), SW.lat(), SW.lng());
-  };
-  // Make the weather request
-  var getWeather = function(northLat, eastLng, southLat, westLng) {
-    gettingData = true;
-    var requestString = "http://api.openweathermap.org/data/2.5/box/city?bbox="
-                        + westLng + "," + northLat + "," //left top
-                        + eastLng + "," + southLat + "," //right bottom
-                        + map.getZoom()
-                        + "&cluster=yes&format=json"
-                        + "&APPID=" + openWeatherMapKey;
-    request = new XMLHttpRequest();
-    request.onload = proccessResults;
-    request.open("get", requestString, true);
-    request.send();
-  };
-  // Take the JSON results and proccess them
-  var proccessResults = function() {
-    console.log(this);
-    var results = JSON.parse(this.responseText);
-    if (results.list.length > 0) {
-        resetData();
-        for (var i = 0; i < results.list.length; i++) {
-          geoJSON.features.push(jsonToGeoJson(results.list[i]));
-        }
-        drawIcons(geoJSON);
-    }
-  };
-  var infowindow = new google.maps.InfoWindow();
-  // For each result that comes back, convert the data to geoJSON
-  var jsonToGeoJson = function (weatherItem) {
-    var feature = {
-      type: "Feature",
-      properties: {
-        city: weatherItem.name,
-        weather: weatherItem.weather[0].main,
-        temperature: weatherItem.main.temp,
-        min: weatherItem.main.temp_min,
-        max: weatherItem.main.temp_max,
-        humidity: weatherItem.main.humidity,
-        pressure: weatherItem.main.pressure,
-        windSpeed: weatherItem.wind.speed,
-        windDegrees: weatherItem.wind.deg,
-        windGust: weatherItem.wind.gust,
-        icon: "http://openweathermap.org/img/w/"
-              + weatherItem.weather[0].icon  + ".png",
-        coordinates: [weatherItem.coord.lon, weatherItem.coord.lat]
-      },
-      geometry: {
-        type: "Point",
-        coordinates: [weatherItem.coord.lon, weatherItem.coord.lat]
-      }
-    };
-    // Set the custom marker icon
-    map.data.setStyle(function(feature) {
-      return {
-        icon: {
-          url: feature.getProperty('icon'),
-          anchor: new google.maps.Point(25, 25)
-        }
-      };
-    });
-    // returns object
-    return feature;
-  };
-  // Add the markers to the map
-  var drawIcons = function (weather) {
-     map.data.addGeoJson(geoJSON);
-     // Set the flag to finished
-     gettingData = false;
-  };
-  // Clear data layer and geoJSON
-  var resetData = function () {
-    geoJSON = {
-      type: "FeatureCollection",
-      features: []
-    };
-    map.data.forEach(function(feature) {
-      map.data.remove(feature);
-    });
-  };
-  google.maps.event.addDomListener(window, 'load', initialize);           }).fail(function() {
-      $('.border').append('<p>Error: Could not load weather data!</p>');
-    });*/
+  */
 
   /********************************************************************************/
  //создаем инфоокно http://mycode.in.ua/js/google-maps/simple-gmap.html
@@ -251,21 +114,27 @@ google.maps.event.addListener(map, 'click', function(event){
       url: url,
       dataType: 'json',
       success: function(response) {
+	var localtime = location.localtime;
         var location = response.location;
         var current = response.current;
+	      $('.localtime').html(location.localtime);
+	      $('.observation_time').html(current.observation_time);
         $('.location').text(location.name + ', ' + location.country);
-        $('.temp_c').html(Math.round(current.temp_c)  + '<a class="cel"> ºC</a>');
-        $('.temp_f').html(Math.round(current.temp_f)  + '<a class="fah"> ºF</a>');
-	$('.feelslike_c').html(Math.round(current.feelslike_c)  + '<a class="cel"> ºC</a>');
-        $('.feelslike_f').html(Math.round(current.feelslike_f)  + '<a class="fah"> ºF</a>');
+        /*$('.temp_c').html(Math.round(current.temp_c)  + '<a class="cel"> ºC</a>');
+        $('.temp_f').html(Math.round(current.temp_f)  + '<a class="fah"> ºF</a>');*/
+	$('.feelslike_f').html(Math.round(location.localtime)  + '<a class="cel"> </a>');
+        $('.feelslike_c').html(Math.round((current.feelslike - 32) / 1,8)  + '<a class="fah"> ºF</a>');
 
 	/*('.wind_dir' + '.wind_kph' + '.wind_mph').html(current.wind_dir + Math.round((current.wind_kph)* 0.27777777777778)  + '<a class="cel"> mitres/h</a>' + Math.round(current.wind_mph)  + '<a class="fah"> miles/h</a>');
         */$('.wind_dir').html(current.wind_dir);
-	$('.wind_kph').html(Math.round(current.wind_kph* 0.27777777777778)  + '<a class="cel"> m/s</a>');
-        $('.wind_mph').html(Math.round(current.wind_mph)  + '<a class="fah"> mph</a>');
+	/*$('.wind_kph').html(Math.round(current.wind_kph* 0.27777777777778)  + '<a class="cel"> m/s</a>');
+        $('.wind_mph').html(Math.round(current.wind_mph)  + '<a class="fah"> mph</a>');*/
+	      $('.wind_kph').html(Math.round(current.wind_speed* 0.27777777777778)  + '<a class="cel"> m/s</a>');
+        $('.wind_mph').html(Math.round(current.wind_speed)  + '<a class="fah"> mph</a>');
 
-        $('.text').text(current.condition.text);
-        $('.icon').attr('src', current.condition.icon);
+
+        $('.text').text(current.weather_descriptions);
+        $('.icon').attr('src', current.weather_icons);
       
 	      
 // 	 function K2F(k){
@@ -276,8 +145,8 @@ google.maps.event.addListener(map, 'click', function(event){
 //     return Math.round(k - 273.15);
 // }       
 	      
-var f = Math.round(current.feelslike_f);
-var c = Math.round(current.feelslike_c); 	      
+var c = Math.round((current.feelslike - 32) / 1,8);
+var f = location.localtime; /*nauchys' perevodyty v cyfru i == */	      
 var nextButton = document.getElementById('next-button');  
 
 // I'm no longer using instafeed, instead I just use the Instagram API and use .replace with some regex to get the full size image.
